@@ -15,10 +15,12 @@ export default function AdminLayout({
 }) {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
+      <div className="fixed inset-y-0 left-0 z-50 w-64">
+        <Sidebar />
+      </div>
+      <div className="flex flex-col flex-1 ml-64">
         <Header />
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
   )

@@ -6,18 +6,18 @@ import { cn } from "@/lib/utils"
 import { LayoutDashboard, Mail, User, FolderKanban, Settings, LogOut } from "lucide-react"
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Contacts", href: "/admin/contacts", icon: Mail },
-  { name: "Introduction", href: "/admin/introduction", icon: User },
-  { name: "Projects", href: "/admin/projects", icon: FolderKanban },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
+  { name: "Dashboard", href: "/zxcvbn-admin", icon: LayoutDashboard },
+  { name: "Contacts", href: "/zxcvbn-admin/contacts", icon: Mail },
+  { name: "Introduction", href: "/zxcvbn-admin/introduction", icon: User },
+  { name: "Projects", href: "/zxcvbn-admin/projects", icon: FolderKanban },
+  { name: "Settings", href: "/zxcvbn-admin/settings", icon: Settings },
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="hidden md:flex md:w-64 md:flex-col">
+    <div className="hidden md:flex md:w-64 md:flex-col h-full">
       <div className="flex flex-col flex-grow pt-5 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
         <div className="flex items-center flex-shrink-0 px-4">
           <h1 className="text-xl font-bold">Admin Panel</h1>
