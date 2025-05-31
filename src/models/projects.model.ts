@@ -10,7 +10,6 @@ export interface IProject extends Document {
     tags: {
         id: UUID;
         name: string;
-        color: "blue" | "purple";
     }[];
     status: string;
     featured: boolean;
@@ -28,8 +27,7 @@ const ProjectSchema: Schema = new Schema({
     category: { type: String, required: true },
     tags: [{
         id: { type: String, required: true },
-        name: { type: String, required: true },
-        color: { type: String, enum: ["blue", "purple"], required: true }
+        name: { type: String, required: true }
     }],
     status: { type: String, required: true },
     featured: { type: Boolean, default: false },

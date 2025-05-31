@@ -7,13 +7,11 @@ import { X, Plus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { v4 as uuidv4 } from "uuid"
 
 interface Tag {
   id: string
   name: string
-  color: "blue" | "purple"
 }
 
 interface ProjectTagInputProps {
@@ -23,7 +21,6 @@ interface ProjectTagInputProps {
 
 export default function ProjectTagInput({ tags, onChange }: ProjectTagInputProps) {
   const [newTagName, setNewTagName] = useState("")
-  const [newTagColor, setNewTagColor] = useState<"blue" | "purple">("blue")
 
   const addTag = () => {
     if (newTagName.trim() === "") return
@@ -31,7 +28,6 @@ export default function ProjectTagInput({ tags, onChange }: ProjectTagInputProps
     const newTag: Tag = {
       id: uuidv4(),
       name: newTagName.trim(),
-      color: newTagColor,
     }
 
     onChange([...tags, newTag])
@@ -56,11 +52,7 @@ export default function ProjectTagInput({ tags, onChange }: ProjectTagInputProps
           <Badge
             key={tag.id}
             variant="secondary"
-            className={
-              tag.color === "blue"
-                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                : "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
-            }
+            className="bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
           >
             {tag.name}
             <button
@@ -83,15 +75,6 @@ export default function ProjectTagInput({ tags, onChange }: ProjectTagInputProps
           placeholder="Add a tag"
           className="flex-1"
         />
-        <Select value={newTagColor} onValueChange={(value: "blue" | "purple") => setNewTagColor(value)}>
-          <SelectTrigger className="w-[100px]">
-            <SelectValue placeholder="Color" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="blue">Blue</SelectItem>
-            <SelectItem value="purple">Purple</SelectItem>
-          </SelectContent>
-        </Select>
         <Button type="button" size="icon" onClick={addTag} disabled={!newTagName.trim()}>
           <Plus className="h-4 w-4" />
           <span className="sr-only">Add tag</span>

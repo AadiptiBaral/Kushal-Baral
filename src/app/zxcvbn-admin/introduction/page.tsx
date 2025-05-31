@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,40 +15,77 @@ import {
 import { toast } from "sonner";
 import { Save } from "lucide-react";
 import { ErrorMessage } from "@hookform/error-message";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { introductionSchema } from "@/schemas/introductionSchema";
+import {
+  introductionSchema,
+  introductionUpdateSchema,
+} from "@/schemas/introductionSchema";
+interface IntroductionData {
+  id?: string;
+  introduction: string;
+  description: string;
+  descriptionTitle: string;
+  numberOfProjects: number;
+  numberOfClients: number;
+  clientSatisfaction: number;
+  yearsOfExperience: number;
+  email: string;
+  phone: string;
+  location: string;
+  resume?: string;
+  avatar?: string;
+}
 
+type IntroductionFormData = z.infer<typeof introductionSchema>;
+type IntroductionUpdateFormData = z.infer<typeof introductionUpdateSchema>;
 export default function IntroductionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { data, error, isLoading, mutate } = useSWR("/api/introduction", (url) =>
-    axios.get(url).then((res) => res.data)
-  );
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    reset,
-  } = useForm<z.infer<typeof introductionSchema>>({
-    resolver: zodResolver(introductionSchema),
-    defaultValues: {
-      introduction: "",
-      description: "",
-      descriptionTitle: "",
-      numberOfProjects: 0,
-      numberOfClients: 0,
-      clientSatisfaction: 0,
-      yearsOfExperience: 0,
-      email: "",
-      phone: "",
-      location: "",
-      resume: "",
-    },
-  });
+  const avatarRef = useRef<HTMLInputElement>(null);
+  const resumeRef = useRef<HTMLInputElement>(null);
+ const fetcher = async (url: string): Promise<IntroductionData | null> => {
+  try {
+    const response = await axios.get<IntroductionData>(url);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return null; // Return null for new users (404 is expected)
+    }
+    throw error;
+  }
+};
+
+// 3. Update SWR hook with proper typing
+const { data, error, isLoading, mutate } = useSWR<IntroductionData | null, AxiosError>(
+  "/api/introduction", 
+  fetcher
+);
+  const isUpdating = !!data; // Check if data exists to determine if we are updating
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+  reset,
+} = useForm<IntroductionFormData | IntroductionUpdateFormData>({
+  resolver: zodResolver(
+    isUpdating ? introductionUpdateSchema : introductionSchema
+  ),
+  defaultValues: {
+    introduction: "",
+    description: "",
+    descriptionTitle: "",
+    numberOfProjects: 0,
+    numberOfClients: 0,
+    clientSatisfaction: 0,
+    yearsOfExperience: 0,
+    email: "",
+    phone: "",
+    location: "",
+  },
+});
 
   // Populate form with data when available
   useEffect(() => {
@@ -66,54 +103,83 @@ export default function IntroductionPage() {
         phone: data.phone || "",
         location: data.location || "",
         resume: data.resume || "",
+        avatar: data.avatar || "",
       });
     }
   }, [data, reset]);
 
-  const onSubmit = async (formData: z.infer<typeof introductionSchema>) => {
-    setIsSubmitting(true);
-    try {
-      let response;
+  // Use a more flexible type that matches what the form actually produces
+const onSubmit = async (formData: IntroductionFormData | IntroductionUpdateFormData) => {
+  setIsSubmitting(true);
 
-      // Use PATCH if data exists, otherwise use POST
-      if (data) {
-        // Only send fields that have been changed
-        response = await axios.patch("/api/introduction", formData);
-        if (response.status === 200) {
-          toast.success("Introduction updated successfully!");
-          // Update cache with new data
-          mutate(response.data);
-        }
-      } else {
-        response = await axios.post("/api/introduction", formData);
-        if (response.status === 201) {
-          toast.success("Introduction created successfully!");
-          // Update cache with new data
-          mutate(response.data);
-        }
+  try {
+    // Validate required files for new profile creation
+    if (!isUpdating) {
+      if (!avatarRef.current?.files?.[0]) {
+        toast.error("Avatar is required for new profiles");
+        return;
       }
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          toast.error(
-            `Error: ${error.response.data.message || error.response.data.error || "An error occurred"}`
-          );
-        } else {
-          toast.error(
-            `Error: ${
-              error.message || "An error occurred. Please try again later."
-            }`
-          );
-        }
-      } else {
-        toast.error(
-          `Error: ${error.message || "An unexpected error occurred"}`
-        );
+      if (!resumeRef.current?.files?.[0]) {
+        toast.error("Resume is required for new profiles");
+        return;
       }
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+
+    const submitData = new FormData();
+
+    // Add all text fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== undefined && value !== "" && value !== null) {
+        submitData.append(key, value.toString());
+      }
+    });
+
+    // Add files from refs
+    if (avatarRef.current?.files?.[0]) {
+      submitData.append("avatar", avatarRef.current.files[0]);
+    }
+
+    if (resumeRef.current?.files?.[0]) {
+      submitData.append("resume", resumeRef.current.files[0]);
+    }
+
+    let response;
+    if (isUpdating) {
+      response = await axios.patch<IntroductionData>("/api/introduction", submitData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 200) {
+        toast.success("Introduction updated successfully!");
+        mutate(response.data);
+      }
+    } else {
+      response = await axios.post<IntroductionData>("/api/introduction", submitData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 201) {
+        toast.success("Introduction created successfully!");
+        mutate(response.data);
+      }
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorData = error.response?.data as { message?: string; error?: string } | undefined;
+      if (error.response) {
+        toast.error(
+          `Error: ${errorData?.message || errorData?.error || "An error occurred"}`
+        );
+      } else {
+        toast.error(`Error: ${error.message || "An error occurred. Please try again later."}`);
+      }
+    } else {
+      toast.error(`Error: ${(error as Error).message || "An unexpected error occurred"}`);
+    }
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -195,6 +261,23 @@ export default function IntroductionPage() {
                     )}
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="avatar">Avatar </Label>
+                  <Input
+                    id="avatar"
+                    ref={avatarRef}
+                    type="file"
+                    accept="image/*"
+                    className={errors.avatar ? "border-red-500" : ""}
+                  />
+                  <ErrorMessage
+                    errors={errors}
+                    name="avatar"
+                    render={({ message }) => (
+                      <p className="text-sm text-red-500">{message}</p>
+                    )}
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -215,7 +298,9 @@ export default function IntroductionPage() {
                         valueAsNumber: true,
                       })}
                       type="number"
-                      className={errors.numberOfProjects ? "border-red-500" : ""}
+                      className={
+                        errors.numberOfProjects ? "border-red-500" : ""
+                      }
                     />
                     <ErrorMessage
                       errors={errors}
@@ -257,7 +342,9 @@ export default function IntroductionPage() {
                       type="number"
                       min="0"
                       max="100"
-                      className={errors.clientSatisfaction ? "border-red-500" : ""}
+                      className={
+                        errors.clientSatisfaction ? "border-red-500" : ""
+                      }
                     />
                     <ErrorMessage
                       errors={errors}
@@ -278,7 +365,9 @@ export default function IntroductionPage() {
                         valueAsNumber: true,
                       })}
                       type="number"
-                      className={errors.yearsOfExperience ? "border-red-500" : ""}
+                      className={
+                        errors.yearsOfExperience ? "border-red-500" : ""
+                      }
                     />
                     <ErrorMessage
                       errors={errors}
@@ -353,8 +442,9 @@ export default function IntroductionPage() {
                   <Label htmlFor="resume">Resume</Label>
                   <Input
                     id="resume"
-                    {...register("resume")}
-                    type="url"
+                    ref={resumeRef}
+                    type="file"
+                    accept=".pdf, .doc, .docx"
                     className={errors.resume ? "border-red-500" : ""}
                   />
                   <ErrorMessage

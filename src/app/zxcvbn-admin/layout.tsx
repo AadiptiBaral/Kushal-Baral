@@ -19,7 +19,7 @@ export default function AdminLayout({
         <Sidebar />
       </div>
       <div className="flex flex-col flex-1 ml-64">
-        <Header />
+
         <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
     </div>

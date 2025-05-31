@@ -22,7 +22,6 @@ import {toast} from "sonner"
 interface Tag {
   id: string
   name: string
-  color: "blue" | "purple"
 }
 
 interface Project {
@@ -95,11 +94,7 @@ export default function ProjectsTable({ projects: initialProjects }: ProjectsTab
                       <Badge
                         key={tag.id}
                         variant="secondary"
-                        className={
-                          tag.color === "blue"
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                            : "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
-                        }
+                        className="bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
                       >
                         {tag.name}
                       </Badge>

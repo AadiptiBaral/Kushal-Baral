@@ -18,7 +18,6 @@ import { ArrowLeft, Save } from "lucide-react"
 interface Tag {
   id: string
   name: string
-  color: "blue" | "purple"
 }
 
 interface Project {
@@ -71,8 +70,8 @@ export default function EditProjectPage({ params }: { params: { id: string } }) 
       image: "/placeholder.svg?height=400&width=600",
       category: "Web Development",
       tags: [
-        { id: "1", name: "React", color: "blue" },
-        { id: "2", name: "Node.js", color: "blue" },
+        { id: "1", name: "React" },
+        { id: "2", name: "Node.js" },
       ],
       status: "Completed",
       featured: true,
