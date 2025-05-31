@@ -11,8 +11,12 @@ import {
   Lightbulb,
   Users
 } from "lucide-react";
+import { IIntroduction } from "@/models/introduction.model";
 
-const About = () => {
+interface AboutProps {
+  introductionData: IIntroduction | null;
+}
+const About = ({introductionData}: AboutProps) => {
   const expertiseAreas = [
     {
       icon: <Palette className="w-8 h-8" />,
@@ -38,10 +42,10 @@ const About = () => {
   ];
 
   const aboutStats = [
-    { number: "50+", label: "Projects Completed" },
-    { number: "3+", label: "Years Experience" },
-    { number: "25+", label: "Happy Clients" },
-    { number: "98%", label: "Client Satisfaction" }
+    { number: introductionData?.numberOfProjects, label: "Projects Completed" },
+    { number: introductionData?.yearsOfExperience + "+", label: "Years Experience" },
+    { number: introductionData?.numberOfClients + "+", label: "Happy Clients" },
+    { number: introductionData?.clientSatisfaction + "%", label: "Client Satisfaction" }
   ];
 
   const personalValues = [
@@ -111,18 +115,13 @@ const About = () => {
               👨‍💻 About Me
             </Badge>
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Passionate About <span className="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">Design</span>
+             {introductionData?.descriptionTitle}
             </h2>
             <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p className="text-lg">
-                Hi there! I'm Kushal Baral, a passionate UI/UX designer based in Nepal with over 3 years of experience in creating meaningful digital experiences.
+             {introductionData?.description}
               </p>
-              <p>
-                I believe that great design is not just about making things look beautiful—it's about creating solutions that are intuitive, accessible, and genuinely helpful to users.
-              </p>
-              <p>
-                When I'm not designing, you'll find me exploring new design trends, learning new tools, or working on personal creative projects.
-              </p>
+             
             </div>
             <div className="grid sm:grid-cols-3 gap-6 pt-8">
               {personalValues.map((value, index) => (

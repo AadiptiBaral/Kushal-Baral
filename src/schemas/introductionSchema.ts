@@ -9,7 +9,6 @@ export const introductionSchema = z.object({
   clientSatisfaction: z.number().min(0).max(100),
   yearsOfExperience: z.number().min(0),
   resume: z.string().url("Invalid resume URL"),
-
   email: z.string().email("Invalid email address"),
   phone: z.string().min(1, "Phone is required"),
   location: z.string().min(1, "Location is required"),
