@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,13 +24,15 @@ import { introductionSchema } from "@/schemas/introductionSchema";
 
 export default function IntroductionPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { data, error, isLoading } = useSWR("/api/introduction", (url) =>
+  const { data, error, isLoading, mutate } = useSWR("/api/introduction", (url) =>
     axios.get(url).then((res) => res.data)
   );
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
+    reset,
   } = useForm<z.infer<typeof introductionSchema>>({
     resolver: zodResolver(introductionSchema),
     defaultValues: {
@@ -47,18 +49,54 @@ export default function IntroductionPage() {
       resume: "",
     },
   });
-  const onSubmit = async (data: z.infer<typeof introductionSchema>) => {
+
+  // Populate form with data when available
+  useEffect(() => {
+    if (data) {
+      // Set form values with the fetched data
+      reset({
+        introduction: data.introduction || "",
+        description: data.description || "",
+        descriptionTitle: data.descriptionTitle || "",
+        numberOfProjects: data.numberOfProjects || 0,
+        numberOfClients: data.numberOfClients || 0,
+        clientSatisfaction: data.clientSatisfaction || 0,
+        yearsOfExperience: data.yearsOfExperience || 0,
+        email: data.email || "",
+        phone: data.phone || "",
+        location: data.location || "",
+        resume: data.resume || "",
+      });
+    }
+  }, [data, reset]);
+
+  const onSubmit = async (formData: z.infer<typeof introductionSchema>) => {
     setIsSubmitting(true);
     try {
-      const response = await axios.post("/api/introduction", data);
-      if (response.status === 201) {
-        toast.success("Introduction updated successfully!");
+      let response;
+
+      // Use PATCH if data exists, otherwise use POST
+      if (data) {
+        // Only send fields that have been changed
+        response = await axios.patch("/api/introduction", formData);
+        if (response.status === 200) {
+          toast.success("Introduction updated successfully!");
+          // Update cache with new data
+          mutate(response.data);
+        }
+      } else {
+        response = await axios.post("/api/introduction", formData);
+        if (response.status === 201) {
+          toast.success("Introduction created successfully!");
+          // Update cache with new data
+          mutate(response.data);
+        }
       }
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
           toast.error(
-            `Error: ${error.response.data.message || "An error occurred"}`
+            `Error: ${error.response.data.message || error.response.data.error || "An error occurred"}`
           );
         } else {
           toast.error(
@@ -76,6 +114,14 @@ export default function IntroductionPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading introduction data. Please try again.</div>;
+  }
 
   return (
     <div className="space-y-6">
