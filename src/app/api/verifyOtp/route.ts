@@ -34,11 +34,11 @@ export async function POST(request: NextRequest) {
     }
     await User.findByIdAndUpdate(
       user._id,
-      { verified: true, $unset: { otp: 1, otpExpires: 1 } },
+      { isVerified: true, $unset: { otp: 1, otpExpires: 1 } },
       { new: true }
     );
     (await cookieStore).delete("session");
-    return Response.json({ message: "OTP verified successfully" });
+    return Response.json({ message: "OTP verified successfully" }, {status: 200});
   } catch (error) {
     return Response.json({ message: "Invalid request" }, { status: 400 });
   }

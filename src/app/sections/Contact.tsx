@@ -168,7 +168,7 @@ const Contact = () => {
             </div>
 
             {/* Additional Info */}
-            <div className="relative group">
+            {/* <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 rounded-2xl blur opacity-10 group-hover:opacity-20 transition duration-500"></div>
               <div className="relative bg-background/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-border p-8">
                 <h3 className="text-2xl font-bold text-foreground mb-6">Why work with me?</h3>
@@ -199,7 +199,7 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Response Time Info */}
             <div className="text-center p-6 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-2xl border border-green-200 dark:border-green-800">

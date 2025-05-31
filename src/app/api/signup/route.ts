@@ -36,10 +36,10 @@ export  async function POST(request: NextRequest) {
 
     await sendOtpEmail(email, user.otp, "Verify your email address");
 
-    void scheduleUnverifiedUserRemoval(
-      (user._id as mongoose.Types.ObjectId).toString(),
-      user.email
-    );
+    // scheduleUnverifiedUserRemoval(
+    //   (user._id as mongoose.Types.ObjectId).toString(),
+    //   user.email
+    // );
 
     const token = await new SignJWT({
       _id: (user._id as mongoose.Types.ObjectId).toString(),

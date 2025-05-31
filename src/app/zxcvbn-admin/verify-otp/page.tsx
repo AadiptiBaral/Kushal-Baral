@@ -14,7 +14,7 @@ import { Shield, RefreshCw, CheckCircle, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import { verifyOtpSchema } from "@/schemas/verifyOtpSchema";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -40,10 +40,10 @@ export default function VerifyOTP() {
   const onSubmit = async (data: z.infer<typeof verifyOtpSchema>) => {
     setIsSubmitting(true);
     try {
-      const response = await axios.post("/api/verify-otp", data);
+      const response = await axios.post("/api/verifyOtp", data);
       if (response.status === 200) {
         toast.success("OTP verified successfully!");
-        router.push("/dashboard");
+        router.push("/zxcvbn-admin/dashboard");
       }
     } catch (error: any) {
       if (axios.isAxiosError(error)) {

@@ -107,7 +107,7 @@ const About = () => {
         {/* About Me Section */}
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           <div className="space-y-8">
-            <Badge variant="outline" className="text-purple-700 dark:text-purple-300">
+            <Badge variant="outline" className="text-purple-700 dark:text-purple-300 text-2xl">
               👨‍💻 About Me
             </Badge>
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">

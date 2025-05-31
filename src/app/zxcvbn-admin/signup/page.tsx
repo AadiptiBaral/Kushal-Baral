@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import axios from "axios";
 import Head from "next/head";
 import { Input } from "@/components/ui/input";
@@ -36,7 +35,7 @@ export default function Signup() {
       const response = await axios.post("/api/signup", data);
       if (response.status === 201) {
         toast.success("Account created successfully!");
-        router.push("/verify-otp");
+        router.push("/zxcvbn-admin/verify-otp");
       }
     } catch (error: any) {
       if (axios.isAxiosError(error)) {

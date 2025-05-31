@@ -50,7 +50,7 @@ export default function Signin() {
         }
       } else if (response?.ok) {
         toast.success('Login successful!');
-        router.push('/dashboard');
+        router.push('/zxcvbn-admin/dashboard');
       } else {
         toast.error('An unexpected error occurred');
       }
@@ -241,7 +241,7 @@ export default function Signin() {
 
                 <div className="mt-6">
                   <Link
-                    href="/signup"
+                    href="/zxcvbn-admin/signup"
                     className="w-full flex justify-center py-3 px-4 border-2 border-border hover:border-muted-foreground rounded-xl shadow-sm text-sm font-medium text-foreground bg-background hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300"
                   >
                     Create an account
