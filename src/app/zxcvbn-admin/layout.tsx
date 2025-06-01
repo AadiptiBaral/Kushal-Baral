@@ -1,7 +1,6 @@
-import type React from "react"
-import type { Metadata } from "next"
-import Sidebar from "@/components/admin/sidebar"
-
+import type React from "react";
+import type { Metadata } from "next";
+import Sidebar from "@/components/admin/sidebar";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -21,13 +20,13 @@ export const metadata: Metadata = {
     //     sizes: "16x16",
     //   },
     // ],
-  }
-}
+  },
+};
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -35,9 +34,8 @@ export default function AdminLayout({
         <Sidebar />
       </div>
       <div className="flex flex-col flex-1 ml-64">
-
         <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
-  )
+  );
 }
