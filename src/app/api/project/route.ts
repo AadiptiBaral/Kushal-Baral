@@ -4,21 +4,52 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { uploadOnAWS } from "@/lib/uploadOnAWS";
+import { getSignedUrl } from "@/lib/uploadOnAWS";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
         await dbConnect();
-        const projects = await Project.find({}).lean();
-        if (!projects || projects.length === 0) {
-            return NextResponse.json([], { status: 200 },);
+        
+        // Get category from URL search params
+        const { searchParams } = new URL(request.url);
+        const category = searchParams.get('category');
+        
+        // Build query object
+        let query = {};
+        if (category && category !== 'All Projects') {
+            // Case-insensitive regex match
+            query = { category: { $regex: new RegExp(`^${category}$`, 'i') } };
         }
-        return NextResponse.json(projects, { status: 200 });
+        
+        const projects = await Project.find(query).lean();
+        
+        if (!projects || projects.length === 0) {
+            return NextResponse.json([], { status: 200 });
+        }
+        
+        // Generate signed URLs for images
+        const projectsWithSignedUrls = await Promise.all(
+            projects.map(async (project) => {
+                if (project.image) {
+                    try {
+                        const signedUrl = await getSignedUrl(project.image);
+                        return { ...project, imageUrl: signedUrl };
+                    } catch (error) {
+                        console.error(`Failed to get signed URL for project ${project._id}:`, error);
+                        return { ...project, imageUrl: null };
+                    }
+                } else {
+                    return { ...project, imageUrl: null };
+                }
+            })
+        );
+        
+        return NextResponse.json(projectsWithSignedUrls, { status: 200 });
     } catch (error) {
         console.error("Error fetching projects:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
-
 export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions);
     if (!session) {

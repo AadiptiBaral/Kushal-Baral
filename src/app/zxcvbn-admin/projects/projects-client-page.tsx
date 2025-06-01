@@ -39,6 +39,7 @@ const categories = [
   "Logo Designs",
   "User Interface",
 ];
+const statuses = ["in-progress", "completed", "conecpt"];
 export default function ProjectsClientPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -58,7 +59,7 @@ export default function ProjectsClientPage() {
       category: "",
       tags: [],
       featured: false,
-      status: "draft",
+      status: "",
       year: new Date().getFullYear(),
       client: "",
       duration: "",
@@ -103,7 +104,7 @@ export default function ProjectsClientPage() {
         mutate();
       }
     } catch (error: any) {
-      // ... rest of error handling
+      
     } finally {
       setIsSubmitting(false);
     }
@@ -221,6 +222,30 @@ export default function ProjectsClientPage() {
                     </SelectContent>
                   </Select>
                   <ErrorMessage errors={errors} name="category" />
+                </div>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="category" className="text-right">
+                  Status
+                </Label>
+                <div className="col-span-3">
+                  <Select
+                    onValueChange={(value) => setValue("status", value)}
+                    value={watch("status")}
+                    required
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statuses.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <ErrorMessage errors={errors} name="status" />
                 </div>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">

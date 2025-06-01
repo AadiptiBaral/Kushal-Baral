@@ -139,6 +139,7 @@ const Introduction = ({ introductionData }: IntroductionProps) => {
                   alt="Kushal Baral - UI/UX Designer"
                   width={384}
                   height={384}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 {/* Overlay with subtle pattern */}
