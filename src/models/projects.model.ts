@@ -1,29 +1,29 @@
 import mongoose, {Schema, Document, mongo} from "mongoose";
-import { UUID } from "crypto";
+
 
 export interface IProject extends Document {
     title: string;
     description: string;
-    longDescription: string;    
-    image: string;
+    longDescription?: string;    
+    image?: string;
     category: string;
     tags: {
-        id: UUID;
+        id: string;
         name: string;
     }[];
     status: string;
     featured: boolean;
     year: number;
     client: string;
-    duration: string;
-    link: string;
+    duration?: string;
+    link?: string;
 }
 
 const ProjectSchema: Schema = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    longDescription: { type: String, required: true },
-    image: { type: String, required: true },
+    longDescription: { type: String, required: false },
+    image: { type: String, required: false },
     category: { type: String, required: true },
     tags: [{
         id: { type: String, required: true },
@@ -33,8 +33,8 @@ const ProjectSchema: Schema = new Schema({
     featured: { type: Boolean, default: false },
     year: { type: Number, required: true },
     client: { type: String, required: true },
-    duration: { type: String, required: true },
-    link: { type: String, required: true }
+    duration: { type: String, required: false },
+    link: { type: String, required: false }
 }, {
     timestamps: true
 });

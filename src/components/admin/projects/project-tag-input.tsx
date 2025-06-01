@@ -1,13 +1,10 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
-import { X, Plus } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { useState, type KeyboardEvent } from "react"
 import { Input } from "@/components/ui/input"
-import { v4 as uuidv4 } from "uuid"
+import { Badge } from "@/components/ui/badge"
+import { X } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface Tag {
   id: string
@@ -17,69 +14,74 @@ interface Tag {
 interface ProjectTagInputProps {
   tags: Tag[]
   onChange: (tags: Tag[]) => void
+  placeholder?: string
 }
 
-export default function ProjectTagInput({ tags, onChange }: ProjectTagInputProps) {
-  const [newTagName, setNewTagName] = useState("")
+export default function ProjectTagInput({ tags, onChange, placeholder = "Add tags..." }: ProjectTagInputProps) {
+  const [inputValue, setInputValue] = useState("")
 
-  const addTag = () => {
-    if (newTagName.trim() === "") return
-
-    const newTag: Tag = {
-      id: uuidv4(),
-      name: newTagName.trim(),
+  const addTag = (tagName: string) => {
+    const trimmedName = tagName.trim()
+    if (trimmedName && !tags.some((tag) => tag.name.toLowerCase() === trimmedName.toLowerCase())) {
+      const newTag: Tag = {
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        name: trimmedName,
+      }
+      onChange([...tags, newTag])
     }
-
-    onChange([...tags, newTag])
-    setNewTagName("")
+    setInputValue("")
   }
 
-  const removeTag = (id: string) => {
-    onChange(tags.filter((tag) => tag.id !== id))
+  const removeTag = (tagId: string) => {
+    onChange(tags.filter((tag) => tag.id !== tagId))
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault()
-      addTag()
+      addTag(inputValue)
+    } else if (e.key === "Backspace" && inputValue === "" && tags.length > 0) {
+      removeTag(tags[tags.length - 1].id)
     }
+  }
+
+  const handleAddClick = () => {
+    addTag(inputValue)
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <Badge
-            key={tag.id}
-            variant="secondary"
-            className="bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
-          >
-            {tag.name}
-            <button
-              type="button"
-              className="ml-1 rounded-full outline-none focus:ring-2 focus:ring-offset-2"
-              onClick={() => removeTag(tag.id)}
-            >
-              <X className="h-3 w-3" />
-              <span className="sr-only">Remove {tag.name} tag</span>
-            </button>
-          </Badge>
-        ))}
-      </div>
-
+    <div className="space-y-2">
       <div className="flex gap-2">
         <Input
-          value={newTagName}
-          onChange={(e) => setNewTagName(e.target.value)}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Add a tag"
+          placeholder={placeholder}
           className="flex-1"
         />
-        <Button type="button" size="icon" onClick={addTag} disabled={!newTagName.trim()}>
-          <Plus className="h-4 w-4" />
-          <span className="sr-only">Add tag</span>
+        <Button type="button" variant="outline" size="sm" onClick={handleAddClick} disabled={!inputValue.trim()}>
+          Add
         </Button>
       </div>
+
+      {tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <Badge key={tag.id} variant="secondary" className="flex items-center gap-1">
+              {tag.name}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 hover:bg-transparent"
+                onClick={() => removeTag(tag.id)}
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </Badge>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

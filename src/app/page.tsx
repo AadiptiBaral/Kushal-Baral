@@ -5,7 +5,7 @@ import axios from "axios";
 import Introduction from "./sections/Introduction";
 import Navbar from "@/components/Navbar";
 import About from "./sections/About";
-// import Portfolio from "./sections/Portfolio";
+import Portfolio from "./sections/Portfolio";
 import Contact from "./sections/Contact";
 import { getSignedUrl } from "@/lib/uploadOnAWS";
 
@@ -60,8 +60,8 @@ export default function Home() {
       <Navbar activeSection={activeSection} onNavigate={handleNavigate} />
       <Introduction introductionData={introductionData} />
       <About introductionData = {introductionData} />
-      {/* <Portfolio /> */}
-      <Contact />
+      <Portfolio />
+      <Contact  introductionData = {introductionData} />
     </>
   );
 }

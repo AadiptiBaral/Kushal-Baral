@@ -9,8 +9,11 @@ import * as z from "zod";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
 import { toast } from "sonner";
-
-const Contact = () => {
+import { IIntroduction } from "@/models/introduction.model";
+interface ContactProps {
+  introductionData: IIntroduction | null;
+}
+const Contact = ({introductionData}: ContactProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   
@@ -240,7 +243,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-foreground">Email</div>
-                      <div className="text-muted-foreground">kushal.baral@email.com</div>
+                      <div className="text-muted-foreground">{introductionData?.email}</div>
                     </div>
                   </div>
 
@@ -250,7 +253,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-foreground">Phone</div>
-                      <div className="text-muted-foreground">+1 (555) 123-4567</div>
+                      <div className="text-muted-foreground">{introductionData?.phone}</div>
                     </div>
                   </div>
 
@@ -260,7 +263,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-foreground">Location</div>
-                      <div className="text-muted-foreground">Pokhara, Nepal</div>
+                      <div className="text-muted-foreground">{introductionData?.location}</div>
                     </div>
                   </div>
                 </div>
