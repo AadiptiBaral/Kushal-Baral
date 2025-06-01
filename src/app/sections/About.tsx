@@ -15,8 +15,10 @@ import { IIntroduction } from "@/models/introduction.model";
 
 interface AboutProps {
   introductionData: IIntroduction | null;
+  onStartProject?: () => void;
 }
-const About = ({introductionData}: AboutProps) => {
+
+const About = ({introductionData, onStartProject}: AboutProps) => {
   const expertiseAreas = [
     {
       icon: <Palette className="w-8 h-8" />,
@@ -157,7 +159,10 @@ const About = ({introductionData}: AboutProps) => {
                   Ready to bring your ideas to life? I'm always excited to work on new projects and collaborate with creative minds.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Button className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+                  <Button 
+                    onClick={onStartProject}
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                  >
                     Start a Project
                   </Button>
                   <Button variant="outline" className="flex-1">

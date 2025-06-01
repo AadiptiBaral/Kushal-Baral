@@ -13,8 +13,8 @@ import { getSignedUrl } from "@/lib/uploadOnAWS";
 export default function Home() {
   const [introductionData, setIntroductionData] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [activeSection, setActiveSection] = useState("home");
+
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home", "about", "projects", "contact"];
@@ -48,6 +48,10 @@ export default function Home() {
         behavior: "smooth",
       });
     }
+  };
+
+  const handleStartProject = () => {
+    scrollToSection("contact");
   };
 
   useEffect(() => {
@@ -87,8 +91,11 @@ export default function Home() {
     <>
       <Navbar activeSection={activeSection} onNavigate={scrollToSection} />
       <Introduction introductionData={introductionData} />
-      <About introductionData={introductionData} />
-      <Portfolio />
+      <About
+        introductionData={introductionData}
+        onStartProject={handleStartProject}
+      />
+      <Portfolio onStartProject={handleStartProject} />
       <Contact introductionData={introductionData} />
       <ScrollToTop showAfter={400} />
     </>

@@ -2,7 +2,14 @@
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, Loader2 } from "lucide-react";
 import Image from "next/image";
@@ -24,7 +31,7 @@ interface Project {
   imageUrl?: string | null;
   category: string;
   tags: ProjectTag[];
-  status: 'completed' | 'in-progress' | 'draft' | 'concept';
+  status: "completed" | "in-progress" | "draft" | "concept";
   featured: boolean;
   year: number;
   client?: string;
@@ -32,7 +39,12 @@ interface Project {
   link?: string;
 }
 
-type ProjectCategory = 'All Projects' | 'Graphics Design' | 'Motion Graphics' | 'Logo Designs' | 'User Interface';
+type ProjectCategory =
+  | "All Projects"
+  | "Graphics Design"
+  | "Motion Graphics"
+  | "Logo Designs"
+  | "User Interface";
 
 interface TabConfig {
   value: ProjectCategory;
@@ -41,41 +53,46 @@ interface TabConfig {
   icon: string;
 }
 
-const Portfolio: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('All Projects');
+interface PortfolioProps {
+  onStartProject?: () => void;
+}
+
+const Portfolio: React.FC<PortfolioProps> = ({ onStartProject }) => {
+  const [activeCategory, setActiveCategory] =
+    useState<ProjectCategory>("All Projects");
 
   // Tab configuration with TypeScript
   const tabsConfig: TabConfig[] = [
     {
-      value: 'All Projects',
-      label: 'All Projects',
-      description: 'Complete portfolio showcase',
-      icon: '🎨'
+      value: "All Projects",
+      label: "All Projects",
+      description: "Complete portfolio showcase",
+      icon: "🎨",
     },
     {
-      value: 'Graphics Design',
-      label: 'Graphics Design',
-      description: 'Print & digital graphics',
-      icon: '🎭'
+      value: "Graphics Design",
+      label: "Graphics Design",
+      description: "Print & digital graphics",
+      icon: "🎭",
     },
     {
-      value: 'Motion Graphics',
-      label: 'Motion Graphics',
-      description: 'Animation & video content',
-      icon: '🎬'
+      value: "Motion Graphics",
+      label: "Motion Graphics",
+      description: "Animation & video content",
+      icon: "🎬",
     },
     {
-      value: 'Logo Designs',
-      label: 'Logo Design',
-      description: 'Brand identity & logos',
-      icon: '🏷️'
+      value: "Logo Designs",
+      label: "Logo Design",
+      description: "Brand identity & logos",
+      icon: "🏷️",
     },
     {
-      value: 'User Interface',
-      label: 'User Interface',
-      description: 'UI/UX design projects',
-      icon: '💻'
-    }
+      value: "User Interface",
+      label: "User Interface",
+      description: "UI/UX design projects",
+      icon: "💻",
+    },
   ];
 
   // SWR fetcher function
@@ -86,21 +103,21 @@ const Portfolio: React.FC = () => {
 
   // Construct API URL with category filter
   const getApiUrl = (category: ProjectCategory) => {
-    if (category === 'All Projects') {
-      return '/api/project';
+    if (category === "All Projects") {
+      return "/api/project";
     }
     return `/api/project?category=${encodeURIComponent(category)}`;
   };
 
   // Fetch projects using SWR
-  const { data: projects = [], error, isLoading } = useSWR(
-    getApiUrl(activeCategory),
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-    }
-  );
+  const {
+    data: projects = [],
+    error,
+    isLoading,
+  } = useSWR(getApiUrl(activeCategory), fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+  });
 
   // Handle tab change
   const handleTabChange = (value: string) => {
@@ -110,27 +127,27 @@ const Portfolio: React.FC = () => {
   // Get status display text
   const getStatusDisplay = (status: string) => {
     switch (status) {
-      case 'in-progress':
-        return 'In Progress';
-      case 'draft':
-        return 'Draft';
-      case 'concept':
-        return 'Concept';
-      case 'completed':
+      case "in-progress":
+        return "In Progress";
+      case "draft":
+        return "Draft";
+      case "concept":
+        return "Concept";
+      case "completed":
       default:
-        return 'Completed';
+        return "Completed";
     }
   };
 
   // Get status variant
   const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'default';
-      case 'in-progress':
-        return 'secondary';
+      case "completed":
+        return "default";
+      case "in-progress":
+        return "secondary";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
@@ -148,7 +165,7 @@ const Portfolio: React.FC = () => {
             onError={(e) => {
               // Fallback to placeholder if signed URL fails
               const target = e.target as HTMLImageElement;
-              target.src = '/placeholder-project.jpg';
+              target.src = "/placeholder-project.jpg";
             }}
             loading="lazy"
           />
@@ -157,20 +174,23 @@ const Portfolio: React.FC = () => {
             <div className="text-4xl text-muted-foreground">🎨</div>
           </div>
         )}
-        
+
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="absolute bottom-4 left-4 right-4 flex gap-2">
-            <Button size="sm" className="bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 text-white border-none">
+            <Button
+              size="sm"
+              className="bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 text-white border-none"
+            >
               <Eye className="w-4 h-4 mr-1" />
               View Details
             </Button>
           </div>
         </div>
-        
+
         {/* Status Badge */}
         <div className="absolute top-4 right-4">
-          <Badge 
+          <Badge
             variant={getStatusVariant(project.status)}
             className="bg-background/90 backdrop-blur-sm text-foreground"
           >
@@ -217,24 +237,20 @@ const Portfolio: React.FC = () => {
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {project.tags.map((tag) => (
-            <Badge 
-              key={tag.id} 
-              variant="outline"
-              className="text-xs"
-            >
+            <Badge key={tag.id} variant="outline" className="text-xs">
               {tag.name}
             </Badge>
           ))}
         </div>
       </CardContent>
-      
+
       <CardFooter>
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="w-full group-hover:bg-blue-50 dark:group-hover:bg-blue-950/20 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-300"
           onClick={() => {
             if (project.link) {
-              window.open(project.link, '_blank');
+              window.open(project.link, "_blank");
             }
           }}
         >
@@ -274,23 +290,23 @@ const Portfolio: React.FC = () => {
         Failed to Load Projects
       </h3>
       <p className="text-muted-foreground mb-4">
-        {error?.message || 'Something went wrong while fetching projects.'}
+        {error?.message || "Something went wrong while fetching projects."}
       </p>
-      <Button 
-        onClick={() => window.location.reload()} 
-        variant="outline"
-      >
+      <Button onClick={() => window.location.reload()} variant="outline">
         Try Again
       </Button>
     </div>
   );
 
   return (
-    <section id="projects" className="py-20 lg:py-32 bg-gradient-to-b from-muted/20 to-background">
+    <section
+      id="projects"
+      className="py-20 lg:py-32 bg-gradient-to-b from-muted/20 to-background"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-full text-blue-700 dark:text-blue-300 text-sm font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-full text-blue-700 dark:text-blue-300 text-xl font-medium mb-6">
             🚀 My Work
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
@@ -300,18 +316,23 @@ const Portfolio: React.FC = () => {
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Explore my latest projects across different design disciplines. Each project represents 
-            a unique challenge and creative solution tailored to client needs.
+            Explore my latest projects across different design disciplines. Each
+            project represents a unique challenge and creative solution tailored
+            to client needs.
           </p>
         </div>
 
         {/* Tabs Component */}
-        <Tabs value={activeCategory} onValueChange={handleTabChange} className="w-full">
+        <Tabs
+          value={activeCategory}
+          onValueChange={handleTabChange}
+          className="w-full"
+        >
           {/* Tabs List */}
           <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 mb-12 bg-muted/50 p-1 rounded-2xl">
             {tabsConfig.map((tab) => (
-              <TabsTrigger 
-                key={tab.value} 
+              <TabsTrigger
+                key={tab.value}
                 value={tab.value}
                 className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-xl py-3 px-4 transition-all duration-300"
               >
@@ -333,10 +354,10 @@ const Portfolio: React.FC = () => {
             <TabsContent key={tab.value} value={tab.value} className="mt-8">
               {/* Loading State */}
               {isLoading && <LoadingGrid />}
-              
+
               {/* Error State */}
               {error && <ErrorDisplay />}
-              
+
               {/* Success State */}
               {!isLoading && !error && (
                 <>
@@ -371,14 +392,15 @@ const Portfolio: React.FC = () => {
               Like what you see?
             </h3>
             <p className="text-muted-foreground mb-6">
-              Let's collaborate on your next project and create something amazing together.
+              Let's collaborate on your next project and create something
+              amazing together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <Button
+                onClick={onStartProject}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
                 Start a Project
-              </Button>
-              <Button variant="outline" className="border-2 border-border hover:border-muted-foreground text-foreground font-semibold px-8 py-3 rounded-xl transition-all duration-300">
-                View All Work
               </Button>
             </div>
           </div>
