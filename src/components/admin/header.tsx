@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, Bell, Sun, Moon, Search } from "lucide-react"
+import { Menu, Bell, Sun, Moon, Search, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -19,6 +19,13 @@ export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { theme, setTheme } = useTheme()
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }
+
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <Button variant="outline" size="icon" className="md:hidden" onClick={() => setSidebarOpen(true)}>
@@ -32,6 +39,10 @@ export default function Header() {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <Button variant="outline" size="icon" onClick={scrollToTop}>
+          <ArrowUp className="h-5 w-5" />
+          <span className="sr-only">Scroll to top</span>
+        </Button>
         <Button variant="outline" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
           <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />

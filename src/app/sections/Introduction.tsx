@@ -9,7 +9,7 @@ interface IntroductionProps {
 }
 const Introduction = ({ introductionData }: IntroductionProps) => {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-background via-background to-blue-50/50 dark:to-blue-950/30 overflow-hidden">
+    <section id="home" className="relative min-h-screen bg-gradient-to-br from-background via-background to-blue-50/50 dark:to-blue-950/30 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30 dark:opacity-20">
         <div className="absolute top-20 right-20 w-72 h-72 bg-blue-200 dark:bg-blue-800 rounded-full blur-3xl"></div>

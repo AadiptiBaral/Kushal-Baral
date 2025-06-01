@@ -69,7 +69,7 @@ const Contact = ({introductionData}: ContactProps) => {
   }
   
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-background via-background to-purple-50/50 dark:to-purple-950/30 overflow-hidden py-16 lg:py-24">
+    <section id="contact" className="relative min-h-screen bg-gradient-to-br from-background via-background to-purple-50/50 dark:to-purple-950/30 overflow-hidden py-16 lg:py-24">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-30 dark:opacity-20">
         <div className="absolute top-20 left-20 w-72 h-72 bg-purple-200 dark:bg-purple-800 rounded-full blur-3xl"></div>

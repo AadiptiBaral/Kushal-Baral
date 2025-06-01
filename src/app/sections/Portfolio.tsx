@@ -286,7 +286,7 @@ const Portfolio: React.FC = () => {
   );
 
   return (
-    <section id="portfolio" className="py-20 lg:py-32 bg-gradient-to-b from-muted/20 to-background">
+    <section id="projects" className="py-20 lg:py-32 bg-gradient-to-b from-muted/20 to-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">

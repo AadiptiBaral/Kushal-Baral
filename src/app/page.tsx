@@ -7,18 +7,46 @@ import Navbar from "@/components/Navbar";
 import About from "./sections/About";
 import Portfolio from "./sections/Portfolio";
 import Contact from "./sections/Contact";
+import ScrollToTop from "@/components/ui/scroll-to-top";
 import { getSignedUrl } from "@/lib/uploadOnAWS";
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState("about");
   const [introductionData, setIntroductionData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const handleNavigate = (section: string) => {
-    setActiveSection(section);
-    const element = document.getElementById(section);
+  const [activeSection, setActiveSection] = useState("home");
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["home", "about", "projects", "contact"];
+      const scrollPosition = window.scrollY + 100; // Offset for navbar height
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check on load
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const offsetTop = element.offsetTop - 80; // Account for fixed navbar
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -57,11 +85,12 @@ export default function Home() {
 
   return (
     <>
-      <Navbar activeSection={activeSection} onNavigate={handleNavigate} />
+      <Navbar activeSection={activeSection} onNavigate={scrollToSection} />
       <Introduction introductionData={introductionData} />
-      <About introductionData = {introductionData} />
+      <About introductionData={introductionData} />
       <Portfolio />
-      <Contact  introductionData = {introductionData} />
+      <Contact introductionData={introductionData} />
+      <ScrollToTop showAfter={400} />
     </>
   );
 }
