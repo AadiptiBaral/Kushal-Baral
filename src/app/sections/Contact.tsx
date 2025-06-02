@@ -14,9 +14,7 @@ interface ContactProps {
   introductionData: IIntroduction | null;
 }
 const Contact = ({introductionData}: ContactProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);  
   const {register, handleSubmit, formState: { errors }, reset} = useForm({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -28,12 +26,10 @@ const Contact = ({introductionData}: ContactProps) => {
   });
   
   const onSubmit = async (data: z.infer<typeof contactSchema>) => {
-    setIsSubmitting(true);
-    setServerError(null);
-    
+    setIsSubmitting(true);    
     try {
       const response = await axios.post("/api/contact", data);
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success("Message sent successfully! I'll get back to you within 24 hours.");
         // Reset form fields
         reset({
@@ -43,7 +39,6 @@ const Contact = ({introductionData}: ContactProps) => {
           message: ""
         });
       } else {
-        setServerError("Failed to send message. Please try again later.");
         toast.error("Failed to send message. Please try again later.");
       }
     } catch (error) {
@@ -60,8 +55,7 @@ const Contact = ({introductionData}: ContactProps) => {
           errorMessage = "No response received from the server. Please check your connection.";
         }
       }
-      
-      setServerError(errorMessage);
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -104,14 +98,7 @@ const Contact = ({introductionData}: ContactProps) => {
                 <p className="text-muted-foreground">Fill out the form below and I'll get back to you within 24 hours.</p>
               </div>
 
-              {serverError && (
-                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg">
-                  <div className="flex items-center gap-2 text-red-700 dark:text-red-400">
-                    <AlertCircle className="h-5 w-5" />
-                    <p className="font-medium">{serverError}</p>
-                  </div>
-                </div>
-              )}
+            
 
               <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className="grid md:grid-cols-2 gap-6">

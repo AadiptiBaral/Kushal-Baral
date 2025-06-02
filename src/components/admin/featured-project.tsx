@@ -55,12 +55,6 @@ export default async function FeaturedProjects() {
           <CardTitle>Featured Projects</CardTitle>
           <CardDescription>Highlighted portfolio projects</CardDescription>
         </div>
-        <Link href="/admin/projects/new">
-          <Button size="sm">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Project
-          </Button>
-        </Link>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
