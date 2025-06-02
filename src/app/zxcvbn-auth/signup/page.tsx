@@ -35,7 +35,7 @@ export default function Signup() {
       const response = await axios.post("/api/signup", data);
       if (response.status === 201) {
         toast.success("Account created successfully!");
-        router.push("/zxcvbn-admin/verify-otp");
+        router.push("/zxcvbn-auth/verify-otp");
       }
     } catch (error: any) {
       if (axios.isAxiosError(error)) {

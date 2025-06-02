@@ -3,7 +3,6 @@ import DashboardStats from "@/components/admin/dashboard-stats";
 import Overview from "@/components/admin/overview";
 import RecentContacts from "@/components/admin/recent-contacts";
 import FeaturedProjects from "@/components/admin/featured-project";
-import Sidebar from "@/components/admin/sidebar";
 export const metadata: Metadata = {
   title: "Admin Dashboard",
   description: "Admin dashboard overview",

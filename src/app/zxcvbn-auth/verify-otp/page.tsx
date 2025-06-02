@@ -43,7 +43,7 @@ export default function VerifyOTP() {
       const response = await axios.post("/api/verifyOtp", data);
       if (response.status === 200) {
         toast.success("OTP verified successfully!");
-        router.push("/zxcvbn-admin/dashboard");
+        router.push("/zxcvbn-admin");
       }
     } catch (error: any) {
       if (axios.isAxiosError(error)) {

@@ -50,7 +50,7 @@ export default function Signin() {
         }
       } else if (response?.ok) {
         toast.success('Login successful!');
-        router.push('/zxcvbn-admin/dashboard');
+        router.push('/zxcvbn-admin');
       } else {
         toast.error('An unexpected error occurred');
       }

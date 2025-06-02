@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { LayoutDashboard, Mail, User, FolderKanban, Settings, LogOut } from "lucide-react"
-
+import { signOut } from "next-auth/react"
 const navigation = [
   { name: "Dashboard", href: "/zxcvbn-admin", icon: LayoutDashboard },
   { name: "Contacts", href: "/zxcvbn-admin/contacts", icon: Mail },
@@ -54,7 +54,9 @@ export default function Sidebar() {
             })}
           </nav>
           <div className="px-2 pb-4">
-            <button className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
+            <button onClick={()=>{
+              signOut({ callbackUrl: "/zxcvbn-auth/signin" })
+            }} className="flex items-center px-2 py-2 text-sm font-medium rounded-md text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 w-full">
               <LogOut className="mr-3 flex-shrink-0 h-5 w-5" aria-hidden="true" />
               Logout
             </button>
