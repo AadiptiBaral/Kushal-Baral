@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 
 interface NavbarProps {
   activeSection: string
-  onNavigate: (section: string) => void
+  onNavigate: (_section: string) => void
 }
 
 export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
@@ -78,7 +78,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                   onClick={() => handleNavClick('contact')}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-2 lg:px-8 lg:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  Let's Talk
+                  Let&apos;s Talk
                 </Button>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                   transitionDelay: isMobileMenuOpen ? `${navItems.length * 50}ms` : '0ms'
                 }}
               >
-                Let's Work Together
+                Let&apos;s Work Together
               </Button>
             </div>
           </div>

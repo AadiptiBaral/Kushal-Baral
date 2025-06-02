@@ -24,7 +24,7 @@ try {
     }
     
 } catch (error) {
-    
+    throw new Error("Failed to fetch featured projects");
 }
 }
 

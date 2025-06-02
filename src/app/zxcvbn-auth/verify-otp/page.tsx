@@ -128,7 +128,7 @@ export default function VerifyOTP() {
                     Enter Verification Code
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    We've sent a 6-digit verification code to your email address
+                    We&apos;ve sent a 6-digit verification code to your email address
                   </p>
                 </div>
 
@@ -205,7 +205,7 @@ export default function VerifyOTP() {
 
                       <div className="text-center">
                         <p className="text-sm text-muted-foreground mb-2">
-                          Didn't receive the code?
+                          Didn&apos;t receive the code?
                         </p>
                         <Button
                           type="button"
@@ -237,10 +237,10 @@ export default function VerifyOTP() {
                     <div className="text-sm text-blue-800 dark:text-blue-200">
                       <p className="font-medium mb-1">Security Tips:</p>
                       <ul className="text-xs space-y-1">
-                        <li>• Don't share your OTP with anyone</li>
+                        <li>• Don&apos;t share your OTP with anyone</li>
                         <li>• The code expires in 10 minutes</li>
                         <li>
-                          • Check your spam folder if you don't see the email
+                          • Check your spam folder if you don&apos;t see the email
                         </li>
                       </ul>
                     </div>

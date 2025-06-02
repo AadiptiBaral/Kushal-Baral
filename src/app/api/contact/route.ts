@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         await dbConnect();
         const contacts = await Contact.find({}).lean();

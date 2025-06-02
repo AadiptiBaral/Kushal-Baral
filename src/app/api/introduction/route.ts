@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { uploadOnAWS } from "@/lib/uploadOnAWS";
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     await dbConnect();
     const introduction = await Introduction.findOne({}).lean();

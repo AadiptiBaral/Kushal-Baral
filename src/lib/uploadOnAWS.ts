@@ -5,7 +5,7 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import {getSignedUrl as getPresignedUrl} from "@aws-sdk/s3-request-presigner";
-export async function uploadOnAWS(file: File, purpose: String) {
+export async function uploadOnAWS(file: File, purpose: string) {
   try {
     if (
       !process.env.AWS_SECRET_ACCESS_KEY ||

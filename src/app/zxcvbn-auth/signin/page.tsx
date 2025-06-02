@@ -54,8 +54,7 @@ export default function Signin() {
       } else {
         toast.error('An unexpected error occurred');
       }
-    } catch (error: any) {
-      console.error('Login error:', error);
+    } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
           const message = error.response.data?.message || 'Login failed';
@@ -234,7 +233,7 @@ export default function Signin() {
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="px-2 bg-background text-muted-foreground">
-                      Don't have an account?
+                      Don&apos;t have an account?
                     </span>
                   </div>
                 </div>

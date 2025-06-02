@@ -1,11 +1,10 @@
 import User from "@/models/user.model";
 import dbConnect from "@/lib/connectDb";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 import { generateOtp, otpExpiry } from "@/lib/generateOtp";
 import sendOtpEmail from "@/lib/sendEmail";
-import scheduleUnverifiedUserRemoval from "@/lib/clearUser";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 
