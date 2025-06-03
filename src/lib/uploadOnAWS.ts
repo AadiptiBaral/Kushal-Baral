@@ -85,3 +85,36 @@ export async function getSignedUrl(key: string) {
     );
   }
 }
+
+export async function getDownloadUrl(key: string) {
+  try {
+    if (
+      !process.env.AWS_SECRET_ACCESS_KEY ||
+      !process.env.AWS_ACCESS_KEY_ID ||
+      !process.env.AWS_REGION
+    ) {
+      throw new Error("AWS credentials are not set");
+    }
+    
+    const s3Client = new S3Client({
+      region: process.env.AWS_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    });
+    
+    const command = new GetObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: key,
+      ResponseContentDisposition: `attachment; filename="${key.split('/').pop()}"`,
+    });
+    
+    const downloadUrl = await getPresignedUrl(s3Client, command, { expiresIn: 3600 });
+    return downloadUrl;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to generate download URL: ${error.message || "Unknown error"}`
+    );
+  }
+}
