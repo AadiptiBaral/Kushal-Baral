@@ -54,7 +54,7 @@ export default function Overview() {
               axisLine={false}
               tickFormatter={(value) => `${value}`}
             />
-            <Tooltip />
+            <Tooltip cursor={false} />
             <Bar dataKey="contacts" fill="#adfa1d" radius={[4, 4, 0, 0]} name="Contacts" />
             <Bar dataKey="projects" fill="#0ea5e9" radius={[4, 4, 0, 0]} name="Projects" />
           </BarChart>

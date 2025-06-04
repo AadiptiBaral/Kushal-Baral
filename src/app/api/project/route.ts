@@ -10,15 +10,23 @@ export async function GET(request: NextRequest) {
     try {
         await dbConnect();
         
-        // Get category from URL search params
+        // Get category and featured from URL search params
         const { searchParams } = new URL(request.url);
         const category = searchParams.get('category');
+        const featured = searchParams.get('featured');
         
         // Build query object
-        let query = {};
+        let query: any = {};
+        
+        // Add category filter if provided
         if (category && category !== 'All Projects') {
             // Case-insensitive regex match
-            query = { category: { $regex: new RegExp(`^${category}$`, 'i') } };
+            query.category = { $regex: new RegExp(`^${category}$`, 'i') };
+        }
+        
+        // Add featured filter if provided
+        if (featured !== null) {
+            query.featured = featured === 'true';
         }
         
         const projects = await Project.find(query).lean();
