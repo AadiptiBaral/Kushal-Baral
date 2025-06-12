@@ -7,6 +7,7 @@ import dbConnect from "@/lib/connectDb";
 import Project from "@/models/projects.model";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/options";
+import { getSignedUrl } from "@/lib/uploadOnAWS";
 export const metadata: Metadata = {
   title: "Admin Dashboard",
   description: "Admin dashboard overview",
@@ -33,13 +34,29 @@ export default async function AdminDashboard() {
       if (!projects || projects.length === 0) {
         return [];
       }
-      return projects;
+      const projectWithSignedUrls = await Promise.all(
+        projects.map(async (project)=>{
+          if (project.image) {
+            try {
+              const signedUrl = await getSignedUrl(project.image);
+              return {...project, image: signedUrl };
+            } catch (error) {
+              console.error(`Failed to get signed URL for project ${project._id}:`, error);
+              return { ...project, image: undefined };
+            }
+          } else {
+            return { ...project, image: undefined };
+          }
+        })
+      )
+      return projectWithSignedUrls;
     } catch (error) {
       console.error("Error fetching projects:", error);
       return [];
     }
   }
   const projects = await fetchProjects();
+  console.log("Fetched projects:", projects);
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
