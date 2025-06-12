@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   description: "Portfolio of Kushal Baral, a Graphic Designer",
   icons: {
     icon: "/favicon.png",
-   
-  }
+  },
 };
 
 export default function RootLayout({
@@ -29,19 +28,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <main>{children}</main>
-          <Toaster closeButton/>
-        </ThemeProvider>
-      </body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main>{children}</main>
+            <Toaster closeButton />
+          </ThemeProvider>
+        </body>
+
     </html>
   );
 }

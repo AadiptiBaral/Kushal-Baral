@@ -5,13 +5,24 @@ import RecentContacts from "@/components/admin/recent-contacts";
 import FeaturedProjects from "@/components/admin/featured-project";
 import dbConnect from "@/lib/connectDb";
 import Project from "@/models/projects.model";
-import { getSignedUrl } from "@/lib/uploadOnAWS";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/options";
 export const metadata: Metadata = {
   title: "Admin Dashboard",
   description: "Admin dashboard overview",
 };
 
 export default async function AdminDashboard() {
+    const session = await getServerSession(authOptions);
+  if (!session) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Please log in to access the dashboard.
+        </h1>
+      </div>
+    );
+  }
   async function fetchProjects() {
     try {
       await dbConnect();

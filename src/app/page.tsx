@@ -9,21 +9,12 @@ import Portfolio from "./sections/Portfolio";
 import Contact from "./sections/Contact";
 import ScrollToTop from "@/components/ui/scroll-to-top";
 import { getSignedUrl } from "@/lib/uploadOnAWS";
-import { useSession } from "next-auth/react";
+
 export default function Home() {
   const [introductionData, setIntroductionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("home");
-  const { data: session } = useSession();
-  if (!session) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          You must be logged in to view this page.
-        </h1>
-      </div>
-    );
-  }
+
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home", "about", "projects", "contact"];

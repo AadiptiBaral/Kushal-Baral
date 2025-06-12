@@ -1,6 +1,8 @@
 import type React from "react";
 import type { Metadata } from "next";
-import Sidebar from "@/components/admin/sidebar";
+import AdminSidebar from "@/components/admin/sidebar";
+import { SidebarTrigger, SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import AuthProvider from "../context/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -29,13 +31,24 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="fixed inset-y-0 left-0 z-50 w-64">
-        <Sidebar />
-      </div>
-      <div className="flex flex-col flex-1 ml-64">
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
-      </div>
-    </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">
+        <AuthProvider>
+          <SidebarProvider>
+            <AdminSidebar />
+            <SidebarInset>
+              <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+                <SidebarTrigger className="-ml-1" />
+                <div className="h-4 w-px bg-sidebar-border" />
+                <h2 className="font-semibold">Admin Dashboard</h2>
+              </header>
+              <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-950">
+                {children}
+              </main>
+            </SidebarInset>
+          </SidebarProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }
