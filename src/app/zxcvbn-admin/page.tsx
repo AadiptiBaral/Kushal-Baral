@@ -56,7 +56,7 @@ export default async function AdminDashboard() {
     }
   }
   const projects = await fetchProjects();
-  console.log("Fetched projects:", projects);
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">

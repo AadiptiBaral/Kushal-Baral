@@ -35,7 +35,7 @@ export default async function FeaturedProjects({
           <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {projects.map((project) => (
               <Card 
-                key={project.id} 
+                key={String(project._id)} 
                 className="group overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
               >
                 <div className="aspect-video bg-gray-100 dark:bg-gray-800 relative overflow-hidden">
