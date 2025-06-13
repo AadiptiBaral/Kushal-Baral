@@ -8,7 +8,7 @@ const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function ContactsPage() {
   const { data, error, isLoading, mutate } = useSWR('/api/contact', fetcher)
-
+  console.log('data', data)
   const contacts = data?.map((contact: any) => ({
     id: contact._id,
     fullName: contact.fullName,
@@ -37,6 +37,7 @@ export default function ContactsPage() {
   if (error) return <div>Error: {error.message}</div>
 
   return (
+    // <div>hello</div>
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>

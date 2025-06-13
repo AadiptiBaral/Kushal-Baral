@@ -18,7 +18,7 @@ export async function GET() {
         await dbConnect();
         const contacts = await Contact.find({}).lean();
         if (!contacts || contacts.length === 0) {
-            return NextResponse.json({ error: "No contacts found" }, { status: 404 });
+           return NextResponse.json([], { status: 200 });
         }
         return NextResponse.json(contacts, { status: 200 });
     } catch (error) {
