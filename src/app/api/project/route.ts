@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
         const featured = searchParams.get('featured');
         
         // Build query object
-        let query: any = {};
+        const query: any = {};
         
         // Add category filter if provided
         if (category && category !== 'All Projects') {
